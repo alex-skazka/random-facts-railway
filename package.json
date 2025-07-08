@@ -1,0 +1,22 @@
+{
+  "name": "facts-browser-extension",
+  "version": "1.0.0",
+  "description": "A browser extension that displays random facts",
+  "main": "background.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "sqlite3": "^5.1.6",
+    "csv-parser": "^3.0.0",
+    "stripe": "^14.0.0"
+  },
+  "keywords": [
+    "browser-extension",
+    "facts",
+    "education"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

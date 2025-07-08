@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 350px;
+      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 300;
+    }
+    
+    .fact-container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .fact-text {
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    
+    .fact-category {
+      font-size: 12px;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    
+    button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .status {
+      text-align: center;
+      font-size: 12px;
+      opacity: 0.8;
+      margin-bottom: 15px;
+    }
+    
+    .premium-banner {
+      background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    
+    .premium-banner h3 {
+      margin: 0 0 5px 0;
+      font-size: 16px;
+    }
+    
+    .premium-banner p {
+      margin: 0;
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      opacity: 0.7;
+    }
+    
+    .footer a {
+      color: white;
+      text-decoration: none;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .spinner {
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 2px solid white;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Daily Facts</h1>
+  </div>
+  
+  <div id="loading" class="loading" style="display: none;">
+    <div class="spinner"></div>
+    <p>Loading fact...</p>
+  </div>
+  
+  <div id="content">
+    <div class="fact-container">
+      <div id="factText" class="fact-text">
+        Click "Get New Fact" to discover something amazing!
+      </div>
+      <div id="factCategory" class="fact-category"></div>
+    </div>
+    
+    <div class="controls">
+      <button id="getFactBtn">Get New Fact</button>
+      <button id="saveFactBtn" style="display: none;">Save Fact</button>
+    </div>
+    
+    <div id="status" class="status"></div>
+    
+    <div id="premiumBanner" class="premium-banner" style="display: none;">
+      <h3>Upgrade to Premium</h3>
+      <p>Unlimited facts • Custom categories • No daily limits</p>
+      <button id="upgradeBtn" style="margin-top: 10px;">Upgrade for $3.99</button>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <a href="#" id="optionsLink">Settings</a> • 
+    <a href="#" id="aboutLink">About</a>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

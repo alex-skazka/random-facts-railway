@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Daily Facts - Settings</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .section {
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .section:last-child {
+      border-bottom: none;
+    }
+    
+    .section h2 {
+      color: #555;
+      margin-bottom: 15px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #333;
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      background: #f9f9f9;
+      border-radius: 5px;
+    }
+    
+    .checkbox-item input[type="checkbox"] {
+      width: auto;
+      margin-right: 10px;
+    }
+    
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+    }
+    
+    .premium-section {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    
+    .premium-section h2 {
+      color: white;
+      margin-top: 0;
+    }
+    
+    .status {
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .saved-facts {
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+    }
+    
+    .saved-fact {
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #f9f9f9;
+      border-radius: 5px;
+      border-left: 4px solid #667eea;
+    }
+    
+    .saved-fact:last-child {
+      margin-bottom: 0;
+    }
+    
+    .fact-text {
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+    
+    .fact-meta {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .tab-button {
+      padding: 10px 20px;
+      border: 1px solid #ccc;
+      background-color: #f0f0f0;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .tab-button.active {
+      background-color: #ddd;
+    }
+
+    .tab-content {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 20px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Payment Section Styles */
+    .pricing-cards {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .pricing-card {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .pricing-card.premium {
+      border-color: #ffc107; /* Example: Gold color for premium */
+    }
+
+    .pricing-header {
+      margin-bottom: 20px;
+    }
+
+    .price {
+      font-size: 2em;
+      font-weight: bold;
+    }
+
+    .price span {
+      font-size: 0.5em;
+      font-weight: normal;
+    }
+
+    .pricing-features {
+      margin-bottom: 20px;
+    }
+
+    .feature {
+      margin-bottom: 10px;
+    }
+
+    .pricing-button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    .pricing-button.premium {
+      background-color: #ffc107; /* Example: Gold color for premium */
+      color: black;
+    }
+
+    .comparison-table {
+      width: 100%;
+      overflow-x: auto; /* For smaller screens */
+    }
+
+    .comparison-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .comparison-table th, .comparison-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .comparison-table th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Daily Facts Settings</h1>
+    
+    <div id="status" class="status" style="display: none;"></div>
+    
+    <!-- Premium Status Section -->
+    <div class="section">
+      <div id="premiumStatus">
+        <div class="premium-section">
+          <h2>Upgrade to Premium</h2>
+          <p>Get unlimited facts, custom categories, and more!</p>
+          <button id="upgradeBtn">Upgrade for $3.99</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Notification Settings -->
+    <div class="section">
+      <h2>Notification Settings</h2>
+      <div class="form-group">
+        <label for="notificationTime">Daily Notification Time:</label>
+        <input type="time" id="notificationTime" value="09:00">
+      </div>
+    </div>
+    
+    <!-- Category Preferences -->
+    <div class="section">
+      <h2>Fact Categories</h2>
+      <p>Select which categories you'd like to receive facts from:</p>
+      <div class="checkbox-group" id="categoryCheckboxes">
+        <!-- Categories will be populated by JavaScript -->
+      </div>
+    </div>
+    
+    <!-- Saved Facts -->
+    <div class="section">
+      <h2>Saved Facts</h2>
+      <div id="savedFactsContainer">
+        <div class="saved-facts" id="savedFactsList">
+          <!-- Saved facts will be populated by JavaScript -->
+        </div>
+        <button id="clearSavedBtn" style="margin-top: 10px;">Clear All Saved Facts</button>
+      </div>
+    </div>
+    
+    <!-- Save Button -->
+    <div class="section">
+      <button id="saveBtn">Save Settings</button>
+    </div>
+  </div>
+  
+  <script src="options.js"></script>
+</body>
+</html>

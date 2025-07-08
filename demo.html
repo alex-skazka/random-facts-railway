@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Daily Facts Extension Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal: #1A5244;
+      --pink: #B33B71;
+      --gold: #C19A6B;
+      --bg-light: #f8f9fa;
+      --text-primary: #2c3e50;
+      --text-secondary: #6c757d;
+      --border-color: #e9ecef;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: var(--bg-light);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    .demo-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .demo-header {
+      text-align: center;
+      margin-bottom: 40px;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .demo-header h1 {
+      color: var(--teal);
+      font-weight: 700;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .demo-header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .demo-section {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .demo-section h3 {
+      background: var(--teal);
+      color: white;
+      padding: 20px;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .demo-content {
+      padding: 25px;
+    }
+
+    /* Popup Demo Styles */
+    .popup-demo {
+      width: 380px;
+      margin: 0 auto;
+      background: var(--bg-light);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+
+    .popup-header {
+      background: linear-gradient(135deg, var(--teal) 0%, #0f3a2d 100%);
+      color: white;
+      padding: 25px 20px;
+      text-align: center;
+    }
+
+    .popup-header h2 {
+      margin: 0 0 5px 0;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+
+    .popup-header .subtitle {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      font-weight: 400;
+    }
+
+    .popup-content {
+      padding: 20px;
+      background: white;
+    }
+
+    .tier-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 15px;
+    }
+
+    .tier-free { background: #e9ecef; color: #6c757d; }
+    .tier-premium { background: #fff3e0; color: var(--gold); }
+    .tier-pro { background: #f3e5f5; color: var(--pink); }
+
+    .fact-display {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--teal);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .fact-text {
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .fact-category {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Manrope', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .primary-btn {
+      background: var(--teal);
+      color: white;
+    }
+
+    .primary-btn:hover {
+      background: #0f3a2d;
+      transform: translateY(-1px);
+    }
+
+    .secondary-btn {
+      background: var(--gold);
+      color: white;
+    }
+
+    .secondary-btn:hover {
+      background: #a8845a;
+      transform: translateY(-1px);
+    }
+
+    .save-btn {
+      background: var(--pink);
+      color: white;
+    }
+
+    .save-btn:hover {
+      background: #9a2f5f;
+      transform: translateY(-1px);
+    }
+
+    .save-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 2px;
+    }
+
+    /* Database Manager Demo Styles */
+    .db-demo {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .controls {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 2px solid var(--border-color);
+      border-radius: 6px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+    }
+
+    .filter-select {
+      padding: 10px 12px;
+      border: 2px solid var(--border-color);
+      border-radius: 6px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      background: white;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: var(--teal);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: var(--gold);
+      color: white;
+    }
+
+    .btn-small {
+      padding: 6px 10px;
+      font-size: 11px;
+    }
+
+    .fact-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      margin-bottom: 15px;
+      overflow: hidden;
+    }
+
+    .fact-header {
+      padding: 15px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .fact-content {
+      flex: 1;
+    }
+
+    .fact-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .category-badge {
+      padding: 4px 10px;
+      border-radius: 15px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-top: 8px;
+      display: inline-block;
+    }
+
+    .category-animals { background: #e8f5e8; color: #2d5a2d; }
+    .category-history { background: #fff3e0; color: #8b4513; }
+    .category-science { background: #e3f2fd; color: #1565c0; }
+
+    .notification-demo {
+      background: linear-gradient(135deg, var(--teal) 0%, #0f3a2d 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .notification-demo::before {
+      content: "🔔";
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 20px;
+    }
+
+    .notification-demo h4 {
+      margin: 0 0 8px 0;
+      font-weight: 600;
+    }
+
+    .notification-demo p {
+      margin: 0 0 15px 0;
+      opacity: 0.9;
+    }
+
+    .notification-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .notification-buttons button {
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .pricing-demo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .pricing-card {
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .pricing-card:hover {
+      border-color: var(--teal);
+      transform: translateY(-2px);
+    }
+
+    .pricing-card.recommended {
+      border-color: var(--pink);
+      background: linear-gradient(135deg, rgba(179, 59, 113, 0.05) 0%, rgba(193, 154, 107, 0.05) 100%);
+    }
+
+    .pricing-card h4 {
+      margin: 0 0 10px 0;
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .pricing-card .price {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--teal);
+      margin: 10px 0;
+    }
+
+    .pricing-card .price-note {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    .pricing-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 15px 0;
+      text-align: left;
+    }
+
+    .pricing-card li {
+      padding: 4px 0;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    /* Preferences Demo Styles */
+    .preferences-demo {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-size: 15px;
+    }
+
+    .form-group .description {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .checkbox-item:hover {
+      border-color: var(--teal);
+      background: rgba(26, 82, 68, 0.05);
+    }
+
+    .checkbox-item.checked {
+      border-color: var(--teal);
+      background: rgba(26, 82, 68, 0.1);
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+    }
+
+    .checkbox-item label {
+      margin: 0;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .radio-item:hover {
+      border-color: var(--teal);
+      background: rgba(26, 82, 68, 0.05);
+    }
+
+    .radio-item.selected {
+      border-color: var(--teal);
+      background: rgba(26, 82, 68, 0.1);
+    }
+
+    .radio-item input[type="radio"] {
+      width: 16px;
+      height: 16px;
+    }
+
+    .upgrade-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .upgrade-modal.show {
+      display: flex;
+    }
+
+    .upgrade-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .upload-demo {
+      border: 2px dashed var(--border-color);
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      margin: 20px 0;
+      transition: all 0.3s ease;
+    }
+
+    .upload-demo:hover {
+      border-color: var(--teal);
+      background: rgba(26, 82, 68, 0.05);
+    }
+
+    .upload-demo .icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+      color: var(--teal);
+    }
+
+    @media (max-width: 768px) {
+      .demo-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .controls {
+        flex-direction: column;
+      }
+      
+      .search-box {
+        min-width: auto;
+      }
+
+      .radio-group {
+        flex-direction: column;
+      }
+    }
+
+    .category-space { background: #e8eaf6; color: #3f51b5; }
+    .category-biology { background: #e8f5e8; color: #388e3c; }
+    .category-languages { background: #fce4ec; color: #c2185b; }
+    .category-food { background: #fff3e0; color: #f57c00; }
+    .category-culture { background: #f3e5f5; color: #7b1fa2; }
+    .category-records { background: #ffebee; color: #d32f2f; }
+    .category-inventions { background: #e0f2f1; color: #00796b; }
+    .category-sports { background: #e3f2fd; color: #1976d2; }
+    .category-tech { background: #f1f8e9; color: #689f38; }
+    .category-century { background: #fff8e1; color: #fbc02d; }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <div class="demo-header">
+      <h1>Daily Facts Browser Extension</h1>
+      <p>Interactive Demo - See how the extension works</p>
+    </div>
+
+    <div class="demo-grid">
+      <!-- Popup Demo -->
+      <div class="demo-section">
+        <h3>Extension Popup</h3>
+        <div class="demo-content">
+          <div class="popup-demo">
+            <div class="popup-header">
+              <h2>Daily Facts</h2>
+              <div class="subtitle">Expand your knowledge</div>
+            </div>
+
+            <div class="popup-content">
+              <div class="tier-badge tier-free">Free Tier</div>
+              
+              <div class="fact-display">
+                <div class="fact-text">Octopuses have three hearts and blue blood, making them one of the most unique creatures in the ocean.</div>
+                <div class="fact-category">animals</div>
+              </div>
+              
+              <div class="buttons">
+                <button class="save-btn" onclick="showUpgradeModal()">Save</button>
+                <button class="primary-btn" onclick="showNewFact()">New Fact</button>
+                <button class="secondary-btn">Settings</button>
+              </div>
+              
+              <div class="stats">
+                <div class="stat-item">
+                  <span class="stat-number">2</span>
+                  <span>Today</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">0</span>
+                  <span>Saved</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">47</span>
+                  <span>Total</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preferences Demo -->
+      <div class="demo-section">
+        <h3>User Preferences</h3>
+        <div class="demo-content">
+          <div class="preferences-demo">
+            <div class="form-group">
+              <label>Fact Categories</label>
+              <p class="description">
+                Select the topics you're interested in learning about.
+              </p>
+              <p style="font-size: 13px; color: var(--teal); font-weight: 600; margin-bottom: 15px;">
+                💡 The more categories you choose, the more facts will be available to you
+              </p>
+              <div class="checkbox-group">
+                <div class="checkbox-item checked" onclick="toggleCheckbox(this)">
+                  <input type="checkbox" checked>
+                  <label>Animals</label>
+                </div>
+                <div class="checkbox-item checked" onclick="toggleCheckbox(this)">
+                  <input type="checkbox" checked>
+                  <label>History</label>
+                </div>
+                <div class="checkbox-item" onclick="toggleCheckbox(this)">
+                  <input type="checkbox">
+                  <label>Space</label>
+                </div>
+                <div class="checkbox-item" onclick="toggleCheckbox(this)">
+                  <input type="checkbox">
+                  <label>Biology</label>
+                </div>
+                <div class="checkbox-item checked" onclick="toggleCheckbox(this)">
+                  <input type="checkbox" checked>
+                  <label>Languages</label>
+                </div>
+                <div class="checkbox-item" onclick="toggleCheckbox(this)">
+                  <input type="checkbox">
+                  <label>Food</label>
+                </div>
+                <div class="checkbox-item" onclick="toggleCheckbox(this)">
+                  <input type="checkbox">
+                  <label>Geography</label>
+                </div>
+                <div class="checkbox-item checked" onclick="toggleCheckbox(this)">
+                  <input type="checkbox" checked>
+                  <label>Science</label>
+                </div>
+                <div class="checkbox-item" onclick="toggleCheckbox(this)">
+                  <input type="checkbox">
+                  <label>Culture</label>
+                </div>
+                <div class="checkbox-item" onclick="toggleCheckbox(this)">
+                  <input type="checkbox">
+                  <label>Records</label>
+                </div>
+                <div class="checkbox-item" onclick="toggleCheckbox(this)">
+                  <input type="checkbox">
+                  <label>Inventions</label>
+                </div>
+                <div class="checkbox-item" onclick="toggleCheckbox(this)">
+                  <input type="checkbox">
+                  <label>Sports</label>
+                </div>
+                <div class="checkbox-item checked" onclick="toggleCheckbox(this)">
+                  <input type="checkbox" checked>
+                  <label>Tech</label>
+                </div>
+                <div class="checkbox-item" onclick="toggleCheckbox(this)">
+                  <input type="checkbox">
+                  <label>Century</label>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Notification Frequency</label>
+              <p class="description">
+                How often would you like to receive fact notifications?
+              </p>
+              <div class="radio-group">
+                <div class="radio-item" onclick="selectRadio(this)">
+                  <input type="radio" name="frequency">
+                  <label>Every 30 minutes</label>
+                </div>
+                <div class="radio-item selected" onclick="selectRadio(this)">
+                  <input type="radio" name="frequency" checked>
+                  <label>Every hour</label>
+                </div>
+                <div class="radio-item" onclick="selectRadio(this)">
+                  <input type="radio" name="frequency">
+                  <label>Every 2 hours</label>
+                </div>
+                <div class="radio-item" onclick="selectRadio(this)">
+                  <input type="radio" name="frequency">
+                  <label>Once a day</label>
+                </div>
+                <div class="radio-item" onclick="selectRadio(this)">
+                  <input type="radio" name="frequency">
+                  <label>When I click extension</label>
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%;">Save Preferences</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification Demo -->
+      <div class="demo-section">
+        <h3>Push Notifications</h3>
+        <div class="demo-content">
+          <div class="notification-demo">
+            <h4>Daily Fact</h4>
+            <p>The shortest war in history lasted only 38-45 minutes between Britain and Zanzibar in 1896.</p>
+            <div class="notification-buttons">
+              <button onclick="showUpgradeModal()">Save</button>
+              <button onclick="dismissNotification()">Dismiss</button>
+            </div>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin-top: 15px;">
+            <strong>Pro users</strong> can save facts directly from notifications for later review.
+          </p>
+        </div>
+      </div>
+
+      <!-- Database Manager Demo -->
+      <div class="demo-section">
+        <h3>Database Manager</h3>
+        <div class="demo-content">
+          <div class="db-demo">
+            <div class="controls">
+              <div class="search-box">
+                <input type="text" placeholder="Search facts..." onkeyup="filterFacts(this.value)">
+              </div>
+              <select class="filter-select" onchange="filterByCategory(this.value)">
+                <option value="">All Categories</option>
+                <option value="animals">Animals</option>
+                <option value="history">History</option>
+                <option value="science">Science</option>
+              </select>
+              <button class="btn btn-secondary" onclick="showBulkUpload()">📁 Bulk Upload</button>
+              <button class="btn btn-primary">+ Add New</button>
+            </div>
+
+            <div class="upload-demo" id="uploadDemo" style="display: none;">
+              <div class="icon">📄</div>
+              <h4>Bulk Upload Facts</h4>
+              <p>Upload CSV or Excel files with columns: text, category, source, tags</p>
+              <button class="btn btn-primary">Choose File</button>
+            </div>
+
+            <div id="factsContainer">
+              <div class="fact-card">
+                <div class="fact-header">
+                  <div class="fact-content">
+                    <div class="fact-text">Honey never spoils. Archaeologists have found edible honey in ancient Egyptian tombs.</div>
+                    <span class="category-badge category-science">science</span>
+                  </div>
+                  <div class="fact-actions">
+                    <button class="btn btn-small btn-primary">Edit</button>
+                    <button class="btn btn-small btn-secondary">Hide</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="fact-card">
+                <div class="fact-header">
+                  <div class="fact-content">
+                    <div class="fact-text">A group of flamingos is called a "flamboyance".</div>
+                    <span class="category-badge category-animals">animals</span>
+                  </div>
+                  <div class="fact-actions">
+                    <button class="btn btn-small btn-primary">Edit</button>
+                    <button class="btn btn-small btn-secondary">Hide</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing Demo -->
+      <div class="demo-section">
+        <h3>One-Time Purchase</h3>
+        <div class="demo-content">
+          <div class="pricing-demo">
+            <div class="pricing-card">
+              <h4>Free</h4>
+              <div class="price">$0</div>
+              <ul>
+                <li>Random facts daily</li>
+                <li>All categories</li>
+                <li>Basic notifications</li>
+              </ul>
+            </div>
+
+            <div class="pricing-card">
+              <h4>Pro</h4>
+              <div class="price">$3.99 <span class="price-note">one-time</span></div>
+              <ul>
+                <li>Unlimited facts</li>
+                <li>Choose categories</li>
+                <li>Custom timing</li>
+                <li>Pause notifications</li>
+              </ul>
+            </div>
+
+            <div class="pricing-card recommended">
+              <h4>Premium</h4>
+              <div class="price">$4.99 <span class="price-note">one-time</span></div>
+              <ul>
+                <li>Everything in Pro</li>
+                <li>Save facts</li>
+                <li>Export collection</li>
+                <li>Priority support</li>
+              </ul>
+            </div>
+          </div>
+          <p style="text-align: center; color: var(--text-secondary); margin-top: 20px; font-weight: 600;">
+            ✨ One-time payment - No recurring charges!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upgrade Modal -->
+  <div class="upgrade-modal" id="upgradeModal">
+    <div class="upgrade-content">
+      <div style="font-size: 48px; margin-bottom: 15px;">🔒</div>
+      <h3 style="color: var(--teal); margin-bottom: 15px; font-weight: 700;">Pro Feature</h3>
+      <p style="color: var(--text-secondary); margin-bottom: 25px; line-height: 1.5;">
+        Saving facts is a Pro feature. Upgrade to Pro for just <strong>$4.99 one-time</strong> to save unlimited facts and unlock all premium features!
+      </p>
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <button onclick="hideUpgradeModal()" style="
+          padding: 10px 20px;
+          background: #e9ecef;
+          color: #6c757d;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          font-family: 'Manrope', sans-serif;
+          font-weight: 600;
+        ">Maybe Later</button>
+        <button onclick="hideUpgradeModal()" style="
+          padding: 10px 20px;
+          background: var(--pink);
+          color: white;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          font-family: 'Manrope', sans-serif;
+          font-weight: 600;
+        ">Upgrade to Pro</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const facts = [
+      { text: "Octopuses have three hearts and blue blood, making them one of the most unique creatures in the ocean.", category: "animals" },
+      { text: "The shortest war in history lasted only 38-45 minutes between Britain and Zanzibar in 1896.", category: "history" },
+      { text: "Honey never spoils. Archaeologists have found edible honey in ancient Egyptian tombs.", category: "science" },
+      { text: "A group of flamingos is called a 'flamboyance'.", category: "animals" },
+      { text: "Shakespeare invented over 1,700 words that we still use today.", category: "history" },
+      { text: "Bananas are berries, but strawberries are not.", category: "science" }
+    ];
+
+    let currentFactIndex = 0;
+
+    function showNewFact() {
+      currentFactIndex = (currentFactIndex + 1) % facts.length;
+      const fact = facts[currentFactIndex];
+      
+      document.querySelector('.fact-text').textContent = fact.text;
+      document.querySelector('.fact-category').textContent = fact.category;
+      
+      // Add animation
+      const factDisplay = document.querySelector('.fact-display');
+      factDisplay.style.transform = 'scale(0.95)';
+      factDisplay.style.opacity = '0.7';
+      
+      setTimeout(() => {
+        factDisplay.style.transform = 'scale(1)';
+        factDisplay.style.opacity = '1';
+      }, 150);
+    }
+
+    function showUpgradeModal() {
+      document.getElementById('upgradeModal').classList.add('show');
+    }
+
+    function hideUpgradeModal() {
+      document.getElementById('upgradeModal').classList.remove('show');
+    }
+
+    function dismissNotification() {
+      document.querySelector('.notification-demo').style.opacity = '0.5';
+      setTimeout(() => {
+        document.querySelector('.notification-demo').style.opacity = '1';
+      }, 1000);
+    }
+
+    function toggleCheckbox(element) {
+      const checkbox = element.querySelector('input[type="checkbox"]');
+      checkbox.checked = !checkbox.checked;
+      element.classList.toggle('checked', checkbox.checked);
+    }
+
+    function selectRadio(element) {
+      // Remove selected class from all radio items
+      document.querySelectorAll('.radio-item').forEach(item => {
+        item.classList.remove('selected');
+        item.querySelector('input[type="radio"]').checked = false;
+      });
+      
+      // Add selected class to clicked item
+      element.classList.add('selected');
+      element.querySelector('input[type="radio"]').checked = true;
+    }
+
+    function showBulkUpload() {
+      const uploadDemo = document.getElementById('uploadDemo');
+      uploadDemo.style.display = uploadDemo.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function filterFacts(searchTerm) {
+      console.log('Searching for:', searchTerm);
+    }
+
+    function filterByCategory(category) {
+      console.log('Filtering by category:', category);
+    }
+
+    // Close modal on outside click
+    document.getElementById('upgradeModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        hideUpgradeModal();
+      }
+    });
+
+    // Add some interactive animations
+    document.addEventListener('DOMContentLoaded', function() {
+      // Animate cards on load
+      const cards = document.querySelectorAll('.demo-section');
+      cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+          card.style.transition = 'all 0.6s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, index * 200);
+      });
+    });
+  </script>
+</body>
+</html>

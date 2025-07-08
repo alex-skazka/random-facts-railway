@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Daily Facts - Database Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --teal: #1A5244;
+      --pink: #B33B71;
+      --gold: #C19A6B;
+      --bg-light: #f8f9fa;
+      --text-primary: #2c3e50;
+      --text-secondary: #6c757d;
+      --border-color: #e9ecef;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    .container {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    .section h2 {
+      color: #555;
+      margin-top: 0;
+    }
+
+    .upload-area {
+      border: 2px dashed #ddd;
+      border-radius: 8px;
+      padding: 40px;
+      text-align: center;
+      background: #fafafa;
+      transition: all 0.3s ease;
+    }
+
+    .upload-area:hover {
+      border-color: #667eea;
+      background: #f0f4ff;
+    }
+
+    .upload-area.dragover {
+      border-color: #667eea;
+      background: #e8f0ff;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .upload-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 10px;
+    }
+
+    .upload-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .controls {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--teal);
+    }
+
+    .filter-select {
+      padding: 12px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      background: white;
+      cursor: pointer;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--teal);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0f3a2d;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: var(--gold);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: #a8845a;
+    }
+
+    .btn-danger {
+      background: var(--pink);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #9a2f5f;
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2em;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 0.9em;
+      opacity: 0.9;
+    }
+
+    .log {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      padding: 15px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+    }
+
+    .success {
+      color: #28a745;
+    }
+
+    .error {
+      color: #dc3545;
+    }
+
+    .warning {
+      color: #ffc107;
+    }
+
+    .progress {
+      width: 100%;
+      height: 20px;
+      background: #e9ecef;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .category-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .category-item {
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      border: 1px solid #dee2e6;
+    }
+
+    .category-count {
+      font-weight: bold;
+      color: #667eea;
+    }
+
+    .facts-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .fact-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .fact-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    }
+
+    .fact-card.hidden {
+      opacity: 0.6;
+      background: #f8f9fa;
+    }
+
+    .fact-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .fact-content {
+      flex: 1;
+    }
+
+    .fact-text {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .fact-meta {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .category-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .category-animals { background: #e8f5e8; color: #2d5a2d; }
+    .category-history { background: #fff3e0; color: #8b4513; }
+    .category-science { background: #e3f2fd; color: #1565c0; }
+    .category-technology { background: #f3e5f5; color: #7b1fa2; }
+    .category-books { background: #fff8e1; color: #f57f17; }
+    .category-geography { background: #e0f2f1; color: #00695c; }
+    .category-space { background: #e8eaf6; color: #3f51b5; }
+    .category-biology { background: #e8f5e8; color: #388e3c; }
+    .category-languages { background: #fce4ec; color: #c2185b; }
+    .category-food { background: #fff3e0; color: #f57c00; }
+    .category-culture { background: #f3e5f5; color: #7b1fa2; }
+    .category-records { background: #ffebee; color: #d32f2f; }
+    .category-inventions { background: #e0f2f1; color: #00796b; }
+    .category-sports { background: #e3f2fd; color: #1976d2; }
+    .category-tech { background: #f1f8e9; color: #689f38; }
+    .category-century { background: #fff8e1; color: #fbc02d; }
+
+    .fact-source {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    .fact-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .fact-footer {
+      padding: 15px 20px;
+      background: var(--bg-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--teal);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 25px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-secondary);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+
+    .empty-state h3 {
+      margin-bottom: 10px;
+      color: var(--text-primary);
+    }
+
+    @media (max-width: 768px) {
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-box {
+        min-width: auto;
+      }
+
+      .fact-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .fact-actions {
+        justify-content: flex-end;
+        margin-top: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Daily Facts Database Manager</h1>
+    
+    <!-- Upload Section -->
+    <div class="section">
+      <h2>Upload Facts Database</h2>
+      <div class="upload-area" id="uploadArea">
+        <p>Drag and drop your CSV file here, or click to select</p>
+        <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+          Choose CSV File
+        </button>
+        <input type="file" id="fileInput" accept=".csv" />
+        <p style="font-size: 12px; color: #666; margin-top: 15px;">
+          Expected format: text,category,source
+        </p>
+      </div>
+      
+      <div class="progress" id="uploadProgress" style="display: none;">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      
+      <div class="log" id="uploadLog" style="display: none;"></div>
+    </div>
+    
+    <!-- Statistics Section -->
+    <div class="section">
+      <h2>Database Statistics</h2>
+      <button class="upload-btn" onclick="loadStats()">Refresh Stats</button>
+      
+      <div class="stats" id="statsContainer">
+        <div class="stat-card">
+          <div class="stat-number" id="totalFacts">-</div>
+          <div class="stat-label">Total Facts</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalCategories">-</div>
+          <div class="stat-label">Categories</div>
+        </div>
+      </div>
+      
+      <div class="category-list" id="categoryList">
+        <!-- Categories will be populated here -->
+      </div>
+    </div>
+    
+    <!-- Sample Data Section -->
+    <div class="section">
+      <h2>Sample Facts</h2>
+      <button class="upload-btn" onclick="loadSampleFacts()">Load Sample Facts</button>
+      <div id="sampleFacts" style="margin-top: 15px;"></div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Fact Modal -->
+  <div id="factModal" class="modal">
+    <div class="modal-content">
+      <h3 id="modalTitle">Add New Fact</h3>
+      <form id="factForm">
+        <div class="form-group">
+          <label for="factText">Fact Text</label>
+          <textarea id="factText" required placeholder="Enter the interesting fact..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="factCategory">Category</label>
+          <select id="factCategory" required>
+            <option value="">Select Category</option>
+            <option value="animals">Animals</option>
+            <option value="history">History</option>
+            <option value="space">Space</option>
+            <option value="biology">Biology</option>
+            <option value="languages">Languages</option>
+            <option value="food">Food</option>
+            <option value="geography">Geography</option>
+            <option value="science">Science</option>
+            <option value="culture">Culture</option>
+            <option value="records">Records</option>
+            <option value="inventions">Inventions</option>
+            <option value="sports">Sports</option>
+            <option value="tech">Tech</option>
+            <option value="century">Century</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="factSource">Source</label>
+          <input type="text" id="factSource" placeholder="Source or reference (optional)">
+        </div>
+        <div class="form-group">
+          <label for="factTags">Tags</label>
+          <input type="text" id="factTags" placeholder="Comma-separated tags (optional)">
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="cancelBtn" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Fact</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="database-manager.js"></script>
+</body>
+</html>

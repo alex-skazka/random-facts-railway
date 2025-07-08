@@ -1,0 +1,12 @@
+text,category,source,tags
+"Your fact text here","animals","Source name","tag1;tag2;tag3"
+"Space fact example","space","NASA","astronomy;cosmos"
+"Biology fact example","biology","Scientific Journal","life;organisms"
+"Language fact example","languages","Linguistics Research","communication;words"
+"Food fact example","food","Culinary Studies","nutrition;cooking"
+"Culture fact example","culture","Anthropology","society;traditions"
+"Record fact example","records","Guinness World Records","achievements;extremes"
+"Invention fact example","inventions","Patent Office","innovation;technology"
+"Sports fact example","sports","Olympic Committee","athletics;competition"
+"Tech fact example","tech","Technology Review","digital;innovation"
+"Century fact example","century","Historical Archives","timeline;era"
